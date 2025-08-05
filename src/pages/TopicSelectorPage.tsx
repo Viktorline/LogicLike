@@ -1,5 +1,11 @@
-import React from "react";
-import { ScrollView, Text, TouchableOpacity } from "react-native";
+import React, { useCallback } from "react";
+import {
+  FlatList,
+  ListRenderItem,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Props {
   topics: string[];
@@ -7,31 +13,51 @@ interface Props {
 }
 
 export default function TopicSelectorPage({ topics, onTopicSelect }: Props) {
+  const handleTopicPress = useCallback(
+    (topic: string) => () => {
+      onTopicSelect(topic);
+    },
+    [onTopicSelect]
+  );
+
+  const renderTopicItem: ListRenderItem<string> = useCallback(
+    ({ item }) => (
+      <TouchableOpacity
+        onPress={handleTopicPress(item)}
+        style={{
+          borderWidth: 1,
+          borderColor: "black",
+          padding: 10,
+          margin: 5,
+        }}
+      >
+        <Text>{item}</Text>
+      </TouchableOpacity>
+    ),
+    [handleTopicPress]
+  );
+
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <Text>Выберите тему</Text>
+    <View style={{ flex: 1, padding: 30 }}>
+      <Text>Выбор темы</Text>
 
       <TouchableOpacity
-        onPress={() => onTopicSelect("Все темы")}
-        style={{ borderWidth: 1, borderColor: "black", padding: 10, margin: 5 }}
+        onPress={handleTopicPress("Все темы")}
+        style={{
+          borderWidth: 1,
+          borderColor: "black",
+          padding: 10,
+          margin: 5,
+        }}
       >
         <Text>Все темы</Text>
       </TouchableOpacity>
 
-      {topics.map((topic) => (
-        <TouchableOpacity
-          key={topic}
-          onPress={() => onTopicSelect(topic)}
-          style={{
-            borderWidth: 1,
-            borderColor: "black",
-            padding: 10,
-            margin: 5,
-          }}
-        >
-          <Text>{topic}</Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
+      <FlatList
+        data={topics}
+        keyExtractor={(item) => item}
+        renderItem={renderTopicItem}
+      />
+    </View>
   );
 }
