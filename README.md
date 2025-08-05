@@ -1,5 +1,8 @@
 # LogicLike
 
+📦 [APK](https://expo.dev/artifacts/eas/uanNzHrLCe9b2jRzmCUioa.apk)  
+🌐 [Expo](https://expo.dev/accounts/viktorline/projects/LogicLike)
+
 A React Native mobile application built with Expo for educational games and logic puzzles.
 
 ## 🚀 Technologies Used
