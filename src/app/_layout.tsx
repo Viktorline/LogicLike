@@ -1,3 +1,4 @@
+import Loader from "@/src/shared/ui/Loader/Loader";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -20,6 +21,10 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  if (!loaded) {
+    return <Loader />;
+  }
 
   return (
     <>
