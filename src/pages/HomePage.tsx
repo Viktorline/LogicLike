@@ -71,7 +71,12 @@ export default function HomePage() {
 
   if (showSelector) {
     return (
-      <TopicSelectorPage topics={allTopics} onTopicSelect={handleTopicSelect} />
+      <TopicSelectorPage
+        topics={allTopics}
+        onTopicSelect={handleTopicSelect}
+        onClose={() => setShowSelector(false)}
+        selectedTopic={selectedTopic}
+      />
     );
   }
 

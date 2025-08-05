@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback } from "react";
 import {
   FlatList,
@@ -6,13 +7,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { moderateScale } from "react-native-size-matters";
 
 interface Props {
   topics: string[];
   onTopicSelect: (topic: string) => void;
+  onClose: () => void;
+  selectedTopic: string;
 }
 
-export default function TopicSelectorPage({ topics, onTopicSelect }: Props) {
+export default function TopicSelectorPage({
+  topics,
+  onTopicSelect,
+  onClose,
+  selectedTopic,
+}: Props) {
   const handleTopicPress = useCallback(
     (topic: string) => () => {
       onTopicSelect(topic);
@@ -21,42 +30,81 @@ export default function TopicSelectorPage({ topics, onTopicSelect }: Props) {
   );
 
   const renderTopicItem: ListRenderItem<string> = useCallback(
-    ({ item }) => (
-      <TouchableOpacity
-        onPress={handleTopicPress(item)}
-        style={{
-          borderWidth: 1,
-          borderColor: "black",
-          padding: 10,
-          margin: 5,
-        }}
-      >
-        <Text>{item}</Text>
-      </TouchableOpacity>
-    ),
-    [handleTopicPress]
+    ({ item }) => {
+      const isSelected = item === selectedTopic;
+
+      return (
+        <TouchableOpacity
+          onPress={handleTopicPress(item)}
+          style={{
+            width: "60%",
+            alignSelf: "center",
+            backgroundColor: isSelected ? "#5CBB73" : "transparent",
+            borderWidth: moderateScale(4),
+            borderColor: isSelected ? "#5CBB73" : "#C6D2E1",
+            paddingVertical: moderateScale(14),
+            paddingHorizontal: moderateScale(20),
+            marginBottom: moderateScale(12),
+            borderRadius: 12,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Nunito",
+              fontWeight: "800",
+              fontSize: moderateScale(24),
+              color: isSelected ? "#fff" : "#39414B",
+            }}
+          >
+            {item}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [handleTopicPress, selectedTopic]
   );
 
   return (
-    <View style={{ flex: 1, padding: 30 }}>
-      <Text>Выбор темы</Text>
-
+    <View
+      style={{
+        flex: 1,
+        paddingTop: moderateScale(24),
+        paddingHorizontal: moderateScale(24),
+        backgroundColor: "#fff",
+      }}
+    >
       <TouchableOpacity
-        onPress={handleTopicPress("Все темы")}
+        onPress={onClose}
         style={{
-          borderWidth: 1,
-          borderColor: "black",
-          padding: 10,
-          margin: 5,
+          position: "absolute",
+          top: 24,
+          right: 24,
+          zIndex: 1,
+          padding: moderateScale(8),
+          borderRadius: moderateScale(4),
         }}
       >
-        <Text>Все темы</Text>
+        <Ionicons name="close" size={moderateScale(32)} color="#9FAAC3" />
       </TouchableOpacity>
+
+      <Text
+        style={{
+          fontFamily: "Nunito",
+          fontWeight: "800",
+          fontSize: moderateScale(24),
+          color: "#39414B",
+          textAlign: "center",
+          marginBottom: moderateScale(24),
+        }}
+      >
+        Выбор темы
+      </Text>
 
       <FlatList
         data={topics}
         keyExtractor={(item) => item}
         renderItem={renderTopicItem}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

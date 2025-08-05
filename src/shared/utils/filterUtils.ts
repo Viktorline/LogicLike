@@ -12,6 +12,7 @@ export const filterGamesByTopic = (
 
 export const extractUniqueTopics = (games: Game[]): string[] => {
   const topics = new Set<string>();
+  topics.add("Все темы");
   games.forEach((game) => {
     game.tags.forEach((tag) => topics.add(tag));
   });
